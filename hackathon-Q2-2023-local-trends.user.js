@@ -132,7 +132,9 @@ function parseTitle(text) {
 
 function parsePrice(text) {
     var price = $(".apexPriceToPay > span", text).text();
-    return price;
+    //console.log("parsing price as ", price);
+    //return price;
+    return ""; //hide price as there is no consistent way to get the price
 }
 
 function getDetailPageGL(asin) {
@@ -146,8 +148,7 @@ function getDetailPageGL(asin) {
         productGL = "Lawn and Garden";
     }
 
-
-    return glString;
+    return productGL;
 }
 
 // function fetchPrimaryDelivery(alt, callback) {
@@ -350,11 +351,6 @@ var zip3SigTermsQuery = {
                         "filter": [
                             {
                                 "term": {
-                                    "product_group_desc": "Apparel"
-                                }
-                            },
-                            {
-                                "term": {
                                     "marketplace_id": 1
                                 }
                             }
@@ -521,7 +517,6 @@ function letsJQuery() {
 
     function updateModalContent(alternatives) {
 
-        
 
 
         var content = "";
@@ -530,6 +525,27 @@ function letsJQuery() {
         // alternatives = alternatives.slice(0,5);
 
         var index = 0;
+        // hijack any existing widget
+        var widget = $("#sp_detail_thematic-highly_rated");
+
+        if (widget.length == 0) {
+            widget = $("#sp_detail_thematic-recent_history");
+        }
+        if (widget.length == 0) {
+            widget = $("#sp_detail");
+        }
+        if (widget.length == 0) {
+            widget = $("#sp_detail2-prime");
+        }
+        if (widget.length == 0) {
+            widget = $("#similarities_feature_div");
+        }
+        if (widget.length == 0) {
+            widget = $("#sp_detail_thematic-top_brands");
+        }
+        widget.find("h2").text("Trending products in your area");
+        widget.find("h2").append(`<div style="font-size:10px;color:black;font-weight:normal">DEX Hackathon 2023</div>`);
+
         alternatives.some(function (alt) {
             // var dateStr;
             // if (alt.delivery) {
@@ -591,21 +607,7 @@ function letsJQuery() {
             // }
             content += `</div></div>`;
 
-            // hijack any existing widget
-            var widget = $("#sp_detail_thematic-highly_rated");
-            if (widget.length == 0) {
-                widget = $("#sp_detail_thematic-recent_history");
-            }
-            if (widget.length == 0) {
-                widget = $("#sp_detail2-prime");
-            }
-            if (widget.length == 0) {
-                widget = $("#similarities_feature_div");
-            }
-            if (widget.length == 0) {
-                widget = $("#similarities_feature_div");
-            }
-            widget.find("h2").text("Trending products in your area");
+
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find("img").eq(0).attr("src", alt.imgsrc);
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find(".sponsored-products-truncator-truncated").text(alt.title);
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find(".a-color-price").text(alt.price);
@@ -613,12 +615,10 @@ function letsJQuery() {
 
             index++;
 
-            /*if (index == 5) {
-                return true;
-            } else {
-                return false;
-            }*/
         })
+
+        // change widget id so it's not affected by the original one
+        // widget.attr("id", "trending-products-in-your-area");
 
         // set content
         modal.setContent(content);
@@ -675,8 +675,8 @@ function letsJQuery() {
     zip3SigTermsQuery.query.bool.filter[0].term.to_zip3 = to_zip3;
 
     // Get the current detail page GL
-    //var product_group_desc = getDetailPageGL();
-    //zip3SigTermsQuery.query.bool.filter[1].term.product_group_desc = product_group_desc;
+    var product_group_desc = getDetailPageGL();
+    zip3SigTermsQuery.query.bool.filter[1].term.product_group_desc = product_group_desc;
 
     osQuery(zip3SigTermsQuery);
 
@@ -696,3 +696,4 @@ function letsJQuery() {
         modal.open();
     });
 }
+
