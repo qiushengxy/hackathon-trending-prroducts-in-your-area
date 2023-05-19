@@ -146,6 +146,10 @@ function getDetailPageGL(asin) {
         productGL = "Home";
     } else if (glString.includes("Garden")) {
         productGL = "Lawn and Garden";
+    } else if (glString.includes("Apparel") || glString.includes("Clothing")) {
+        productGL = "Apparel";
+    } else if (glString.includes("Grocery")) {
+        productGL = "Grocery";
     }
 
     return productGL;
