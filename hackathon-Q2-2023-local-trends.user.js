@@ -4,7 +4,7 @@
 // @name           Hackathon Q2 2023 - Local Trends
 // @version 1
 // @description    add additional information to buy box / detail page
-// @include        http*://*.amazon.com/*/dp/*
+// @include        http*://*.amazon.com/*
 // @grant         GM.xmlHttpRequest
 // @grant       GM_xmlhttpRequest
 // @connect     os-dashboard.prod.bolts-locality-opensearch.dex.amazon.dev
@@ -613,6 +613,7 @@ function letsJQuery() {
 
 
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find("img").eq(0).attr("src", alt.imgsrc);
+            widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find("img").eq(0).attr("style", "max-height:160px");
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find(".sponsored-products-truncator-truncated").text(alt.title);
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").find(".a-color-price").text(alt.price);
             widget.find(".a-carousel-viewport").find(".a-carousel-card").eq(index).find(".a-link-normal").attr("href", alt.url);
